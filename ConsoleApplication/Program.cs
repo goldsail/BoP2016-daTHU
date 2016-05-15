@@ -189,6 +189,8 @@ namespace ConsoleApplication
 
         static void response()
         {
+            System.Net.ServicePointManager.DefaultConnectionLimit = 1000;
+
             while (true)
             {
                 using (HttpListener listener = new HttpListener())
@@ -204,7 +206,7 @@ namespace ConsoleApplication
 
                         //等待请求连接
                         //没有请求则GetContext处于阻塞状态
-
+                        Console.WriteLine("Pending: Waiting for Request");
                         HttpListenerContext ctx = listener.GetContext();
                         //
                         string id1 = ctx.Request.QueryString["id1"].ToString();
@@ -281,62 +283,175 @@ namespace ConsoleApplication
                         Obj dest = new Obj(T2, ID2);
                         dept.Print();
                         dest.Print();
-
                         ArrayList result = new ArrayList();
-                        try
+
+
+                       
+                        if (true)
                         {
-                            // result = SearchPath(dept, dest);
-                            result = nSearch(dept, dest);
+                            try
+                            {
+                                // result = SearchPath(dept, dest);
+                                result = nSearch(dept, dest);
+                                Console.WriteLine("Success! ");
+                                Console.WriteLine();
+                                Console.WriteLine();
+                            }
+                            catch
+                            {
+                                Console.WriteLine("Internal Error");
+                                ctx.Response.StatusCode = 500;
+                                continue;
+                            }
+
                         }
-                        catch
-                        {
-                            Console.WriteLine("Internal Error");
-                            ctx.Response.StatusCode = 500;
-                            continue;
-                        }
-                        //
+
+                        List<Int64> r1 = new List<Int64>();
+                        List<Int64> r2 = new List<Int64>();
+                        List<Int64> r3 = new List<Int64>();
+                        List<Int64> r4 = new List<Int64>();
+                        List<Int64> r5 = new List<Int64>();
+                        List<Int64> r6 = new List<Int64>();
+                        List<Int64> r7 = new List<Int64>();
+                        List<Int64> r8 = new List<Int64>();
+                        List<Int64> r9 = new List<Int64>();
 
                         //使用Writer输出http响应代码
+
+
                         using (StreamWriter writer = new StreamWriter(ctx.Response.OutputStream))
                         {
+                            Console.Write("...Writing Response...");
                             writer.Write("[");
+                            int pos = 0;
                             foreach (ArrayList a in result)
                             {
                                 if (a.Count < 2 || a.Count > 4)
                                     continue;
-                                if (result.IndexOf(a) > 0)
-                                    writer.Write(",");
-                                writer.Write("[");
+
+                                int flag = 0;
+
                                 switch (a.Count)
                                 {
                                     case 2:
                                         Obj t0 = a[0] as Obj;
                                         Obj t1 = a[1] as Obj;
+
+                                        int _n2 = r1.Count;
+                                        if (_n2 > 0)
+                                        {
+                                            for (int i = 0; i < _n2; i++)
+                                            {
+                                                if (r1[i] == t0.ID && r2[i] == t1.ID)
+                                                {
+                                                    Console.WriteLine("==============");
+                                                    flag = 1;
+                                                }
+                                            }
+                                        }
+
+                                        if (flag == 1)
+                                            continue;
+
+                                        r1.Add(t0.ID);
+                                        r2.Add(t1.ID);
+                                        // Console.WriteLine("                         ------------ " + r1.Count.ToString());
+                                        if (pos > 0)
+                                            writer.Write(",");
+                                        writer.Write("[");
+                                        
                                         writer.Write(t0.ID.ToString() + "," + t1.ID.ToString());
+                                        pos++;
+                                        writer.Write("]");
                                         break;
+
                                     case 3:
                                         Obj t2 = a[0] as Obj;
                                         Obj t3 = a[1] as Obj;
                                         Obj t4 = a[2] as Obj;
+
+                                        int _n3 = r3.Count;
+                                        if (_n3 > 0)
+                                        {
+                                            for(int i=0; i < _n3; i++)
+                                            {
+                                                if(r3[i]==t2.ID && r4[i]==t3.ID && r5[i] == t4.ID)
+                                                {
+                                                    Console.WriteLine("==============");
+                                                    flag = 1;
+                                                }
+                                            }
+                                        }
+
+                                        if (flag == 1)
+                                            continue;
+
+                                        r3.Add(t2.ID);
+                                        r4.Add(t3.ID);
+                                        r5.Add(t4.ID);
+                                        // Console.WriteLine("                         ------------ " + r3.Count.ToString());
+
+                                        if (pos > 0)
+                                            writer.Write(",");
+                                        writer.Write("[");
+                                        
                                         writer.Write(t2.ID.ToString() + "," + t3.ID.ToString() + "," + t4.ID.ToString());
+                                        pos++;
+                                        writer.Write("]");
                                         break;
                                     case 4:
                                         Obj t5 = a[0] as Obj;
                                         Obj t6 = a[1] as Obj;
                                         Obj t7 = a[2] as Obj;
                                         Obj t8 = a[3] as Obj;
-                                        writer.Write(t5.ID.ToString() + "," + t6.ID.ToString() + "," + t7.ID.ToString() + "," + t8.ID.ToString());
+
+                                        int _n4 = r6.Count;
+                                        if (_n4 > 0)
+                                        {
+                                            for (int i = 0; i < _n4; i++)
+                                            {
+                                                if (r6[i] == t5.ID && r7[i] == t6.ID && r8[i] == t7.ID && r9[i]==t8.ID)
+                                                {
+                                                    Console.WriteLine("==============");
+                                                    flag = 1;
+                                                }
+                                            }
+                                        }
+
+                                        if (flag == 1)
+                                            continue;
+
+                                        r6.Add(t5.ID);
+                                        r7.Add(t6.ID);
+                                        r8.Add(t7.ID);
+                                        r9.Add(t8.ID);
+                                        // Console.WriteLine("                         ------------ " + r6.Count.ToString());
+
+                                        if (true)
+                                        //if (t5.ID != t7.ID && t6.ID != t8.ID)
+                                        {
+                                            if (pos > 0)
+                                                writer.Write(",");
+                                            writer.Write("[");
+
+                                            writer.Write(t5.ID.ToString() + "," + t6.ID.ToString() + "," + t7.ID.ToString() + "," + t8.ID.ToString());
+                                            pos++;
+                                            writer.Write("]");
+                                        }
                                         break;
                                     default:
                                         continue;
                                 }
-                                writer.Write("]");
+                                
                             }
 
                             writer.Write("]");
                             writer.Close();
 
                             ctx.Response.Close();
+                            Console.WriteLine(" Succeeded");
+                            Console.WriteLine();
+                            Console.WriteLine();
                         }
 
                     }
@@ -346,6 +461,7 @@ namespace ConsoleApplication
             }
         } // 监听端口、解析请求，调用SearchPath函数、返回响应
 
+#if DEBUG
         static bool isLegalPath(string prev, string next)
         {
             switch (prev)
@@ -386,10 +502,12 @@ namespace ConsoleApplication
             }
             return false;
         }
+#endif
+
 
         static void Main(string[] args)
         {
-            
+#if !DEBUG
             while (true)
             {
                 try
@@ -401,14 +519,14 @@ namespace ConsoleApplication
                     continue;
                 }
             }
-            
+#endif
 
-            Obj test = new Obj("AuthorField", 56590836);
+            //Obj test = new Obj("AuthorField", 56590836);
             //ArrayList temp = Request(test);
             //Console.WriteLine(temp.Count);
 
-            Obj test0 = new Obj("Paper", 2059036641);
-            Out0 test00 = Request(test0);
+            //Obj test0 = new Obj("Paper", 2059036641);
+            //Out0 test00 = Request(test0);
             // string temp = GetRequest("Composite(AA.AuId=2134693834)", "Id%2cAA.AuId%2cAA.AfId%2cF.FId%2cRId%2cJ.JId%2cC.CId");
             // ArrayList tmp = ParseRequest(temp);
             //string a = "{\"age\":[42, 36],\"name\":\"John\"}";
@@ -423,10 +541,10 @@ namespace ConsoleApplication
 
             //Obj test1 = new Obj("Paper", 2114983066);
             //Obj test2 = new Obj("Paper", 2100188138);
-            Obj test1 = new Obj("Paper", 189831743);
-            Obj test2 = new Obj("Paper", 41008148);
+            Obj test1 = new Obj("Author", 57898110);
+            Obj test2 = new Obj("Author", 2014261844);
 
-            ArrayList res = SearchPath(test1, test2);
+            ArrayList res = nSearch(test1, test2);
             Console.WriteLine(res.Count.ToString());
 
             //Out0 response0 = Request(test1);
@@ -437,6 +555,7 @@ namespace ConsoleApplication
             Console.ReadKey();
         }
 
+#if DEBUG
         static ArrayList SearchPath(Obj dept, Obj dest)
         {
             // 返回一个ArrayList，每个元素也是一个ArrayList，记录路径上的各个节点Obj
@@ -943,6 +1062,7 @@ namespace ConsoleApplication
             return ret;
         }
 
+
         static bool isType(string s)
         {
             switch (s)
@@ -969,31 +1089,7 @@ namespace ConsoleApplication
         }
 
 
-        static string GetRequest(string expression, string attributes, int count)
-        {
-            Console.WriteLine("API Request started");
-            string requestUrl = "https:" + "//oxfordhk.azure-api.net/academic/v1.0/evaluate?expr=" + expression
-                + "&count=" + count.ToString() + "&attributes=" + attributes
-                + "&subscription-key=f7cc29509a8443c5b3a5e56b0e38b5a6";
 
-            HttpWebRequest myRequest = WebRequest.Create(requestUrl) as HttpWebRequest;
-
-            myRequest.ServicePoint.Expect100Continue = false;
-            myRequest.ServicePoint.UseNagleAlgorithm = false;
-            myRequest.Headers.Clear();  //清除http请求头信息
-            myRequest.Timeout = 300000;   //超时时间
-            myRequest.Method = "GET";  //默认GET方式提交
-            myRequest.ContentType = "text/html";
-
-            HttpWebResponse myResponse = myRequest.GetResponse() as HttpWebResponse;
-            string response = string.Empty;
-            using (StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8))
-            {
-                response = reader.ReadToEnd();
-            }
-            Console.WriteLine("API Request finished");
-            return response;
-        }
 
         // 将Bing返回的 json 字符串解析为由 Obj 元素构成的 ArrayList
         static Out0 Request(Obj obj)
@@ -1043,9 +1139,50 @@ namespace ConsoleApplication
             Console.WriteLine("Request finished. Return count: " + b.entities.Length.ToString());
             return b;
         }
+#endif
+
+        static string GetRequest(string expression, string attributes, int count)
+        {
+            
+            //Console.WriteLine("API Request started");
+            string requestUrl = "https:" + "//oxfordhk.azure-api.net/academic/v1.0/evaluate?expr=" + expression
+                + "&count=" + count.ToString() + "&attributes=" + attributes
+                + "&subscription-key=f7cc29509a8443c5b3a5e56b0e38b5a6";
+
+            HttpWebRequest myRequest = WebRequest.Create(requestUrl) as HttpWebRequest;
+            myRequest.ServicePoint.Expect100Continue = false;
+            myRequest.ServicePoint.UseNagleAlgorithm = false;
+            myRequest.Headers.Clear();  //清除http请求头信息
+            myRequest.Timeout = 1000000;   //超时时间
+            myRequest.Method = "GET";  //默认GET方式提交
+            myRequest.ContentType = "text/html";
+            HttpWebResponse myResponse = myRequest.GetResponse() as HttpWebResponse;
+            string response = string.Empty;
+
+            using (StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8))
+            {
+                response = reader.ReadToEnd();
+            }
+            //Console.WriteLine("API Request finished");
+
+            try
+            {
+                myResponse.Close();
+                return response;
+            }
+            catch
+            {
+                return response;
+            }
+
+            return response;
+        }
 
         static Out0 nRequest(string expr, string attr, int count)
         {
+            Console.WriteLine();
+            Console.WriteLine("                     " + expr);
+            Console.WriteLine("                     " + attr);
             string retAPI = GetRequest(expr, attr, count);
             MemoryStream stream = new MemoryStream(Encoding.Default.GetBytes(retAPI));
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Out0));
@@ -1057,6 +1194,11 @@ namespace ConsoleApplication
 
         static ArrayList nSearch(Obj dept, Obj dest)
         {
+#if DEBUG
+            const int Max_Count = 3000;
+#else
+            const int Max_Count = 130000;
+#endif
             Console.WriteLine("nSearch");
             ArrayList ret = new ArrayList();
             try
@@ -1067,24 +1209,181 @@ namespace ConsoleApplication
                     {
                         // Paper to Paper
                         // 始末节点的请求统一进行，如需要更多属性请直接在此添加
-                        Out0 deptOut = nRequest("Id=" + dept.ID.ToString(), "Id%2cRId%2cAA.AuId", 10000);
-                        Out0 destOut = nRequest("Id=" + dest.ID.ToString(), "AA.AuId%2cF.FId%2cJ.JId%2cC.CId", 10000);
+                        Out0 deptOut = nRequest("Id=" + dept.ID.ToString(), "Id%2cRId%2cAA.AuId%2cC.CId%2cJ.JId%2cF.FId", Max_Count);
+                        Out0 destOut = nRequest("Id=" + dest.ID.ToString(), "Id%2cAA.AuId%2cF.FId%2cJ.JId%2cC.CId", Max_Count);
 
-                        Console.WriteLine("fwafwaefds");
+                        // Paper -> J/C/F -> Paper
+                        // Paper -> J/C/F -> Paper -> Paper
+                        if (deptOut.entities[0].C != null)
+                        {
+                            if (destOut.entities[0].C != null)
+                            {
+                                if (deptOut.entities[0].C.CId != 0)
+                                {
+                                    if (deptOut.entities[0].C.CId == destOut.entities[0].C.CId)
+                                    {
+                                        Console.WriteLine("=======  Id -> C.CId -> Id");
+                                        ArrayList temp = new ArrayList();
+                                        temp.Add(dept);
+                                        Obj _mid = new Obj("Conference", deptOut.entities[0].C.CId);
+                                        temp.Add(_mid);
+                                        temp.Add(dest);
+                                        ret.Add(temp);
+                                    }
+                                }
+                            }
+
+                            Out0 cOut = nRequest("Composite(C.CId=" + deptOut.entities[0].C.CId.ToString() + ")", "Id%2cRId", Max_Count);
+                            if (cOut.entities != null)
+                            {
+                                foreach (IDClass d in cOut.entities)
+                                {
+                                    if (d.RId != null)
+                                    {
+                                        foreach (Int64 b in d.RId)
+                                        {
+                                            if (b == dest.ID)
+                                            {
+                                                Console.WriteLine("=======  Id -> C.CId -> Id -> Id");
+                                                ArrayList temp = new ArrayList();
+                                                temp.Add(dept);
+                                                Obj _mid1 = new Obj("Conference", deptOut.entities[0].C.CId);
+                                                temp.Add(_mid1);
+                                                Obj _mid2 = new Obj("Paper", d.Id);
+                                                temp.Add(_mid2);
+                                                temp.Add(dest);
+                                                ret.Add(temp);
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (deptOut.entities[0].J != null)
+                        {
+                            if (destOut.entities[0].J != null)
+                            {
+                                if (deptOut.entities[0].J.JId != 0)
+                                {
+                                    if (deptOut.entities[0].J.JId == destOut.entities[0].J.JId)
+                                    {
+                                        Console.WriteLine("=======  Id -> J.JId -> Id");
+                                        ArrayList temp = new ArrayList();
+                                        temp.Add(dept);
+                                        Obj _mid = new Obj("Journal", deptOut.entities[0].J.JId);
+                                        temp.Add(_mid);
+                                        temp.Add(dest);
+                                        ret.Add(temp);
+                                    }
+                                }
+                            }
+
+                            Out0 jOut = nRequest("Composite(J.JId=" + deptOut.entities[0].J.JId.ToString() + ")", "Id%2cRId", Max_Count);
+                            if (jOut.entities != null)
+                            {
+                                foreach (IDClass d in jOut.entities)
+                                {
+                                    if (d.RId != null)
+                                    {
+                                        foreach (Int64 b in d.RId)
+                                        {
+                                            if (b == dest.ID)
+                                            {
+                                                Console.WriteLine("=======  Id -> J.JId -> Id -> Id");
+                                                ArrayList temp = new ArrayList();
+                                                temp.Add(dept);
+                                                Obj _mid1 = new Obj("Journal", deptOut.entities[0].J.JId);
+                                                temp.Add(_mid1);
+                                                Obj _mid2 = new Obj("Paper", d.Id);
+                                                temp.Add(_mid2);
+                                                temp.Add(dest);
+                                                ret.Add(temp);
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (deptOut.entities[0].F != null && destOut.entities[0].F != null)
+                        {
+                            foreach (FClass f in deptOut.entities[0].F)
+                            {
+                                foreach (FClass ff in destOut.entities[0].F)
+                                {
+                                    if (f.FId == ff.FId)
+                                    {
+                                        Console.WriteLine("=======  Id -> F.FId -> Id");
+                                        ArrayList temp = new ArrayList();
+                                        temp.Add(dept);
+                                        Obj _mid = new Obj("Field", f.FId);
+                                        temp.Add(_mid);
+                                        temp.Add(dest);
+                                        ret.Add(temp);
+                                    }
+                                }
+
+                                /*
+                                Parallel.ForEach(destOut.entities[0].F, (ff) =>
+                                {
+                                    if (f.FId == ff.FId)
+                                    {
+                                        ArrayList temp = new ArrayList();
+                                        temp.Add(dept);
+                                        Obj _mid = new Obj("Field", f.FId);
+                                        temp.Add(_mid);
+                                        temp.Add(dest);
+                                        ret.Add(temp);
+                                    }
+                                });
+                                */
+
+
+                                Out0 fOut = nRequest("Composite(F.FId=" + f.FId.ToString() + ")", "Id%2cRId", Max_Count);
+                                if (fOut.entities != null)
+                                {
+                                    foreach (IDClass d in fOut.entities)
+                                    {
+                                        if (d.RId != null)
+                                        {
+                                            foreach (Int64 b in d.RId)
+                                            {
+                                                if (b == dest.ID)
+                                                {
+                                                    Console.WriteLine("=======  Id -> F.FId -> Id -> Id");
+                                                    ArrayList temp = new ArrayList();
+                                                    temp.Add(dept);
+                                                    Obj _mid1 = new Obj("Field", f.FId);
+                                                    temp.Add(_mid1);
+                                                    Obj _mid2 = new Obj("Paper", d.Id);
+                                                    temp.Add(_mid2);
+                                                    temp.Add(dest);
+                                                    ret.Add(temp);
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        ;
                         // Paper -> Paper
                         if (deptOut.entities[0].RId != null)
                         {
-                            foreach(Int64 a in deptOut.entities[0].RId)
+                            foreach (Int64 a in deptOut.entities[0].RId)
                             {
-                                
                                 if (a == dest.ID)
                                 {
-                                    
+                                    Console.WriteLine("=======  Id -> Id");
                                     ArrayList temp = new ArrayList();
                                     temp.Add(dept);
                                     temp.Add(dest);
                                     ret.Add(temp);
-                                    break;
+
                                 }
                             }
                         }
@@ -1092,40 +1391,69 @@ namespace ConsoleApplication
                         // Paper -> Paper -> Paper && Paper -> Paper -> Paper-> Paper && Paper -> Paper -> Author -> Paper
                         if (deptOut.entities[0].RId != null)
                         {
-                            foreach(Int64 a in deptOut.entities[0].RId)
+                            foreach (Int64 a in deptOut.entities[0].RId)
                             {
-                                Out0 aOut = nRequest("Id=" + a.ToString(), "RId%2cAA.AuId%2cJ.JId%2cC.CId%2cF.FId", 10000);
+                                Out0 aOut = nRequest("Id=" + a.ToString(), "Id%2cRId%2cAA.AuId%2cJ.JId%2cC.CId%2cF.FId", Max_Count);
+
+                                if (aOut.entities[0].AA != null && destOut.entities[0].AA != null)
+                                {
+                                    foreach (AAClass p1 in aOut.entities[0].AA)
+                                    {
+                                        foreach (AAClass p2 in destOut.entities[0].AA)
+                                        {
+                                            if (p1.AuId == p2.AuId)
+                                            {
+                                                Console.WriteLine("=======  Id -> Id -> AA.AuId -> Id");
+                                                ArrayList temp = new ArrayList();
+                                                temp.Add(dept);
+                                                Obj _mid1 = new Obj("Paper", a);
+                                                temp.Add(_mid1);
+                                                Obj _mid2 = new Obj("Author", p1.AuId);
+                                                temp.Add(_mid2);
+                                                temp.Add(dest);
+                                                ret.Add(temp);
+
+                                            }
+                                        }
+                                    }
+                                }
 
                                 if (aOut.entities[0].J != null && destOut.entities[0].J != null)
                                 {
-                                    if(aOut.entities[0].J.JId == destOut.entities[0].J.JId)
+                                    if (aOut.entities[0].J.JId != 0)
                                     {
-                                        ArrayList temp = new ArrayList();
-                                        temp.Add(dept);
-                                        Obj _mid1 = new Obj("Paper", a);
-                                        temp.Add(_mid1);
-                                        Obj _mid2 = new Obj("Journal", aOut.entities[0].J.JId);
-                                        temp.Add(_mid2);
-                                        temp.Add(dest);
-                                        ret.Add(temp);
-                                        break;
+                                        if (aOut.entities[0].J.JId == destOut.entities[0].J.JId)
+                                        {
+                                            Console.WriteLine("=======  Id -> Id -> J.JId -> Id");
+                                            ArrayList temp = new ArrayList();
+                                            temp.Add(dept);
+                                            Obj _mid1 = new Obj("Paper", a);
+                                            temp.Add(_mid1);
+                                            Obj _mid2 = new Obj("Journal", aOut.entities[0].J.JId);
+                                            temp.Add(_mid2);
+                                            temp.Add(dest);
+                                            ret.Add(temp);
+                                        }
                                     }
                                 }
 
                                 if (aOut.entities[0].C != null && destOut.entities[0].C != null)
                                 {
-                                    if (aOut.entities[0].C.CId == destOut.entities[0].C.CId)
+                                    if (aOut.entities[0].C.CId != 0)
                                     {
-                                        ArrayList temp = new ArrayList();
-                                        temp.Add(dept);
-                                        Obj _mid1 = new Obj("Paper", a);
-                                        temp.Add(_mid1);
-                                        Obj _mid2 = new Obj("Conference", aOut.entities[0].C.CId);
-                                        
-                                        temp.Add(_mid2);
-                                        temp.Add(dest);
-                                        ret.Add(temp);
-                                        break;
+                                        if (aOut.entities[0].C.CId == destOut.entities[0].C.CId)
+                                        {
+                                            Console.WriteLine("=======  Id -> Id -> C.CId -> Id");
+                                            ArrayList temp = new ArrayList();
+                                            temp.Add(dept);
+                                            Obj _mid1 = new Obj("Paper", a);
+                                            temp.Add(_mid1);
+                                            Obj _mid2 = new Obj("Conference", aOut.entities[0].C.CId);
+
+                                            temp.Add(_mid2);
+                                            temp.Add(dest);
+                                            ret.Add(temp);
+                                        }
                                     }
                                 }
 
@@ -1133,39 +1461,41 @@ namespace ConsoleApplication
                                 {
                                     foreach (FClass t1 in aOut.entities[0].F)
                                     {
-                                        foreach(FClass t2 in destOut.entities[0].F)
+                                        foreach (FClass t2 in destOut.entities[0].F)
                                         {
-                                            Int64 m1 = t1.FId;
-                                            Int64 m2 = t2.FId;
-                                            if (m1 == m2)
+
+                                            if (t1.FId == t2.FId)
                                             {
+                                                Console.WriteLine("=======  Id -> Id -> F.FId -> Id");
                                                 ArrayList temp = new ArrayList();
                                                 temp.Add(dept);
                                                 Obj _mid1 = new Obj("Paper", a);
                                                 temp.Add(_mid1);
-                                                Obj _mid2 = new Obj("Field", m1);
+                                                Obj _mid2 = new Obj("Field", t1.FId);
                                                 temp.Add(_mid2);
                                                 temp.Add(dest);
                                                 ret.Add(temp);
-                                                break;
+
                                             }
                                         }
                                     }
-                                   
+
                                 }
 
 
                                 if (aOut.entities[0].AA != null)
                                 {
-                                    foreach(AAClass b in aOut.entities[0].AA)
+                                    List<Int64> AuId = new List<Int64>();
+                                    foreach (AAClass b in aOut.entities[0].AA)
                                     {
-                                        Out0 bOut = nRequest("Composite(AA.AuId=" + b.AuId.ToString() + ")", "Id", 10000);
+                                        Out0 bOut = nRequest("Composite(AA.AuId=" + b.AuId.ToString() + ")", "Id%2cRId", Max_Count);
                                         if (bOut.entities != null)
                                         {
-                                            foreach(IDClass c in bOut.entities)
+                                            foreach (IDClass c in bOut.entities)
                                             {
                                                 if (c.Id == dest.ID)
                                                 {
+                                                    Console.WriteLine("=======  Id -> AA.AuId -> Id");
                                                     ArrayList temp = new ArrayList();
                                                     temp.Add(dept);
                                                     Obj _mid1 = new Obj("Paper", a);
@@ -1174,46 +1504,184 @@ namespace ConsoleApplication
                                                     temp.Add(_mid2);
                                                     temp.Add(dest);
                                                     ret.Add(temp);
-                                                    break;
+                                                }
+
+                                                if (c.RId != null)
+                                                {
+                                                    foreach (Int64 q in c.RId)
+                                                    {
+                                                        if (q == dest.ID)
+                                                        {
+                                                            Console.WriteLine("=======  Id -> AA.AuId -> Id -> Id");
+                                                            ArrayList temp = new ArrayList();
+                                                            temp.Add(dept);
+                                                            Obj _mid1 = new Obj("Author", b.AuId);
+                                                            temp.Add(_mid1);
+                                                            Obj _mid2 = new Obj("Paper", c.Id);
+                                                            temp.Add(_mid2);
+                                                            temp.Add(dest);
+                                                            ret.Add(temp);
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
+
                                     }
                                 }
 
                                 if (aOut.entities[0].RId != null)
                                 {
-                                    foreach(Int64 b in aOut.entities[0].RId)
+                                    foreach (Int64 b in aOut.entities[0].RId)
                                     {
                                         if (b == dest.ID)
                                         {
+                                            Console.WriteLine("=======  Id -> Id -> Id");
                                             ArrayList temp = new ArrayList();
                                             temp.Add(dept);
                                             Obj _mid = new Obj("Paper", a);
                                             temp.Add(_mid);
                                             temp.Add(dest);
                                             ret.Add(temp);
-                                            break;
                                         }
-                                        else
+
+                                        Out0 bOut = nRequest("Id=" + b.ToString(), "RId", Max_Count);
+                                        if (bOut.entities[0].RId != null)
                                         {
-                                            Out0 bOut = nRequest("Id=" + b.ToString(), "RId", 10000);
-                                            if (bOut.entities[0].RId != null)
+                                            foreach (Int64 c in bOut.entities[0].RId)
                                             {
-                                                foreach(Int64 c in bOut.entities[0].RId)
+                                                if (c == dest.ID)
                                                 {
-                                                    if (c == dest.ID)
-                                                    {
-                                                        ArrayList temp = new ArrayList();
-                                                        temp.Add(dept);
-                                                        Obj _mid1 = new Obj("Paper", a);
-                                                        temp.Add(_mid1);
-                                                        Obj _mid2 = new Obj("Paper", b);
-                                                        temp.Add(_mid2);
-                                                        temp.Add(dest);
-                                                        ret.Add(temp);
-                                                        break;
-                                                    }
+                                                    Console.WriteLine("=======  Id -> Id -> Id -> Id");
+                                                    ArrayList temp = new ArrayList();
+                                                    temp.Add(dept);
+                                                    Obj _mid1 = new Obj("Paper", a);
+                                                    temp.Add(_mid1);
+                                                    Obj _mid2 = new Obj("Paper", b);
+                                                    temp.Add(_mid2);
+                                                    temp.Add(dest);
+                                                    ret.Add(temp);
+
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+
+                        // Paper -> Author -> Paper
+                        if (deptOut.entities[0].AA != null && destOut.entities[0].AA != null)
+                        {
+                            foreach (AAClass a in deptOut.entities[0].AA)
+                            {
+                                foreach (AAClass b in destOut.entities[0].AA)
+                                {
+                                    if (a.AuId == b.AuId)
+                                    {
+                                        Console.WriteLine("=======  Id -> AA.AuId -> Id");
+                                        ArrayList temp = new ArrayList();
+                                        temp.Add(dept);
+                                        Obj _temp = new Obj("Author", a.AuId);
+                                        temp.Add(_temp);
+                                        temp.Add(dest);
+                                        ret.Add(temp);
+
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        // Paper to Author
+                        Out0 deptOut = nRequest("Id=" + dept.ID.ToString(), "AA.AfId%2cId%2cRId%2cAA.AuId%2cF.FId%2cJ.JId%2cC.CId", Max_Count);
+                        Out0 destOut = nRequest("Composite(AA.AuId=" + dest.ID.ToString() + ")", "AA.AfId%2cId%2cRId%2cAA.AuId%2cF.FId%2cJ.JId%2cC.CId", Max_Count);
+
+                        if (deptOut.entities[0].C != null)
+                        {
+                            Out0 cOut = nRequest("Composite(C.CId=" + deptOut.entities[0].C.CId.ToString() + ")", "AA.AfId%2cId%2cRId%2cAA.AuId%2cF.FId%2cJ.JId%2cC.CId", Max_Count);
+                            if (cOut.entities != null)
+                            {
+                                foreach (IDClass d in cOut.entities)
+                                {
+                                    if (d.AA != null)
+                                    {
+                                        foreach (AAClass a in d.AA)
+                                        {
+                                            if (a.AuId == dest.ID)
+                                            {
+                                                ArrayList temp = new ArrayList();
+                                                temp.Add(dept);
+                                                Obj _mid1 = new Obj("Conference", deptOut.entities[0].C.CId);
+                                                temp.Add(_mid1);
+                                                Obj _mid2 = new Obj("Paper", d.Id);
+                                                temp.Add(_mid2);
+                                                temp.Add(dest);
+                                                ret.Add(temp);
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (deptOut.entities[0].J != null)
+                        {
+                            Out0 jOut = nRequest("Composite(J.JId=" + deptOut.entities[0].J.JId.ToString() + ")", "AA.AfId%2cId%2cRId%2cAA.AuId%2cF.FId%2cJ.JId%2cC.CId", Max_Count);
+                            if (jOut.entities != null)
+                            {
+                                foreach (IDClass d in jOut.entities)
+                                {
+                                    if (d.AA != null)
+                                    {
+                                        foreach (AAClass a in d.AA)
+                                        {
+                                            if (a.AuId == dest.ID)
+                                            {
+                                                ArrayList temp = new ArrayList();
+                                                temp.Add(dept);
+                                                Obj _mid1 = new Obj("Journal", deptOut.entities[0].J.JId);
+                                                temp.Add(_mid1);
+                                                Obj _mid2 = new Obj("Paper", d.Id);
+                                                temp.Add(_mid2);
+                                                temp.Add(dest);
+                                                ret.Add(temp);
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (deptOut.entities[0].F != null)
+                        {
+                            foreach (FClass f in deptOut.entities[0].F)
+                            {
+                                Out0 fOut = nRequest("Composite(F.FId=" + f.FId.ToString() + ")", "Id%2cAA.AuId", Max_Count);
+                                if (fOut.entities != null)
+                                {
+                                    foreach (IDClass d in fOut.entities)
+                                    {
+                                        if (d.AA != null)
+                                        {
+                                            foreach (AAClass a in d.AA)
+                                            {
+                                                if (a.AuId == dest.ID)
+                                                {
+                                                    ArrayList temp = new ArrayList();
+                                                    temp.Add(dept);
+                                                    Obj _mid1 = new Obj("Field", f.FId);
+                                                    temp.Add(_mid1);
+                                                    Obj _mid2 = new Obj("Paper", d.Id);
+                                                    temp.Add(_mid2);
+                                                    temp.Add(dest);
+                                                    ret.Add(temp);
+
                                                 }
                                             }
                                         }
@@ -1222,40 +1690,175 @@ namespace ConsoleApplication
                             }
                         }
 
-                        // Paper -> Author -> Paper && Paper -> Author -> Paper -> Paper
-                        if(deptOut.entities[0].AA!=null && destOut.entities[0].AA != null)
+                        if (deptOut.entities[0].AA != null)
                         {
-                            foreach(AAClass a in deptOut.entities[0].AA)
+                            Console.WriteLine("            aOutCount: " + deptOut.entities[0].AA.Length);
+                            foreach (AAClass a in deptOut.entities[0].AA)
                             {
-                                foreach(AAClass b in destOut.entities[0].AA)
+                                Out0 aOut = nRequest("Composite(AA.AuId=" + a.AuId.ToString() + ")", "AA.AfId%2cId%2cRId%2cAA.AuId%2cF.FId%2cJ.JId%2cC.CId", Max_Count);
+                                if (a.AuId == dest.ID)
                                 {
-                                    if(a.AuId == b.AuId)
-                                    {
-                                        ArrayList temp = new ArrayList();
-                                        temp.Add(dept);
-                                        Obj _temp = new Obj("Author", a.AuId);
-                                        temp.Add(_temp);
-                                        temp.Add(dest);
-                                        ret.Add(temp);
-                                        break;
-                                    }
+                                    ArrayList temp = new ArrayList();
+                                    temp.Add(dept);
+                                    temp.Add(dest);
+                                    ret.Add(temp);
+
                                 }
-                                Out0 aOut = nRequest("Composite(AA.AuId=" + a.AuId.ToString() + ")", "Id%2cRId", 10000);
-                                if (aOut.entities != null)
+
+                                if (destOut.entities != null)
                                 {
-                                    foreach( IDClass b in aOut.entities)
+                                    Console.WriteLine("            destOutCount: " + destOut.entities.Length);
+                                    foreach (IDClass d in destOut.entities)
                                     {
-                                        if (b.RId != null)
+                                        if (d.AA != null)
                                         {
-                                            foreach(Int64 c in b.RId)
+                                            Console.WriteLine("            AACount: " + d.AA.Length);
+                                            foreach (AAClass A in d.AA)
                                             {
-                                                if (c == dest.ID)
+                                                if (A.AuId == a.AuId)
                                                 {
                                                     ArrayList temp = new ArrayList();
                                                     temp.Add(dept);
                                                     Obj _mid1 = new Obj("Author", a.AuId);
                                                     temp.Add(_mid1);
-                                                    Obj _mid2 = new Obj("Paper", b.Id);
+                                                    Obj _mid2 = new Obj("Paper", d.Id);
+                                                    temp.Add(_mid2);
+                                                    temp.Add(dest);
+                                                    ret.Add(temp);
+                                                }
+
+                                                if (A.AuId == dest.ID)
+                                                {
+
+                                                    if (aOut.entities[0].AA != null)
+                                                    {
+                                                        foreach (AAClass B in aOut.entities[0].AA)
+                                                        {
+                                                            if (B.AuId == a.AuId)
+                                                            {
+                                                                if (A.AfId != 0 && B.AfId != 0)
+                                                                {
+                                                                    if (A.AfId == B.AfId)
+                                                                    {
+                                                                        ArrayList temp = new ArrayList();
+                                                                        temp.Add(dept);
+                                                                        Obj _mid1 = new Obj("Author", a.AuId);
+                                                                        temp.Add(_mid1);
+                                                                        Obj _mid2 = new Obj("AuthorField", A.AfId);
+                                                                        temp.Add(_mid2);
+                                                                        temp.Add(dest);
+                                                                        ret.Add(temp);
+
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+                            if (deptOut.entities[0].RId != null && destOut.entities != null)
+                            {
+
+                                foreach (Int64 a in deptOut.entities[0].RId)
+                                {
+                                    Out0 aOut = nRequest("Id=" + a.ToString(), "RId", Max_Count);
+                                    foreach (IDClass d in destOut.entities)
+                                    {
+                                        if (a == d.Id)
+                                        {
+                                            ArrayList temp = new ArrayList();
+                                            temp.Add(dept);
+                                            Obj _mid = new Obj("Paper", a);
+                                            temp.Add(_mid);
+                                            temp.Add(dest);
+                                            ret.Add(temp);
+
+                                        }
+
+                                        if (aOut.entities[0].RId != null)
+                                        {
+
+                                            foreach (Int64 b in aOut.entities[0].RId)
+                                            {
+                                                if (b == d.Id)
+                                                {
+                                                    ArrayList temp = new ArrayList();
+                                                    temp.Add(dept);
+                                                    Obj _mid1 = new Obj("Paper", a);
+                                                    temp.Add(_mid1);
+                                                    Obj _mid2 = new Obj("Paper", b);
+                                                    temp.Add(_mid2);
+                                                    temp.Add(dest);
+                                                    ret.Add(temp);
+
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (dest.Type == "Paper")
+                    {
+                        // Author to Paper
+                        Out0 deptOut = nRequest("Composite(AA.AuId=" + dept.ID.ToString() + ")", "Id%2cRId%2cJ.JId%2cC.CId%2cF.FId%2cAA.AuId%2cAA.AfId", Max_Count);
+                        Out0 destOut = nRequest("Id=" + dest.ID.ToString(), "Id%2cAA.AuId%2cAA.AfId%2cJ.JId%2cF.FId%2cC.CId", Max_Count);
+
+                        List<Int64> AfId = new List<Int64>(); // 由于AfId有很多重复，记录AfId
+                        if (deptOut.entities != null)
+                        {
+                            foreach (IDClass d in deptOut.entities)
+                            {
+                                if (d.AA != null)
+                                {
+                                    foreach (AAClass _a in d.AA)
+                                    {
+                                        if (_a.AuId == dept.ID)
+                                        {
+                                            if (_a.AfId != 0)
+                                            {
+                                                AfId.Add(_a.AfId);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (deptOut.entities != null)
+                        {
+                            foreach (IDClass d in deptOut.entities)
+                            {
+                                // AuId -> AfId -> AuId -> Id
+
+
+                                if (destOut.entities[0].AA != null)
+                                {
+                                    foreach (AAClass a in destOut.entities[0].AA)
+                                    {
+                                        if (a.AfId != 0)
+                                        {
+                                            foreach (Int64 q in AfId)
+                                            {
+                                                if (q == a.AfId)
+                                                {
+                                                    // AuId -> AfId -> AuId -> Id
+                                                    ArrayList temp = new ArrayList();
+                                                    temp.Add(dept);
+                                                    Obj _mid1 = new Obj("AuthorField", q);
+                                                    temp.Add(_mid1);
+                                                    Obj _mid2 = new Obj("Author", a.AuId);
                                                     temp.Add(_mid2);
                                                     temp.Add(dest);
                                                     ret.Add(temp);
@@ -1265,35 +1868,254 @@ namespace ConsoleApplication
                                         }
                                     }
                                 }
+
+
+                                if (d.Id == dest.ID)
+                                {
+                                    // AuId -> Id
+                                    ArrayList temp = new ArrayList();
+                                    temp.Add(dept);
+                                    temp.Add(dest);
+                                    ret.Add(temp);
+                                }
+
+
+                                if (d.RId != null)
+                                {
+                                    foreach (Int64 a in d.RId)
+                                    {
+                                        if (a == dest.ID)
+                                        {
+                                            // AuId -> Id -> Id
+                                            ArrayList temp = new ArrayList();
+                                            temp.Add(dept);
+                                            Obj _mid = new Obj("Paper", d.Id);
+                                            temp.Add(_mid);
+                                            temp.Add(dest);
+                                            ret.Add(temp);
+                                        }
+                                        else
+                                        {
+                                            Out0 aOut = nRequest("Id=" + a.ToString(), "Id%2cRId", Max_Count);
+                                            if (aOut.entities[0].RId != null)
+                                            {
+                                                foreach (Int64 t in aOut.entities[0].RId)
+                                                {
+                                                    if (t == dest.ID)
+                                                    {
+                                                        // AuId -> Id -> Id -> Id
+                                                        ArrayList temp = new ArrayList();
+                                                        temp.Add(dept);
+                                                        Obj _mid1 = new Obj("Paper", d.Id);
+                                                        temp.Add(_mid1);
+                                                        Obj _mid2 = new Obj("Paper", a);
+                                                        temp.Add(_mid2);
+                                                        temp.Add(dest);
+                                                        ret.Add(temp);
+
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (d.J != null && destOut.entities[0].J != null)
+                                {
+                                    if (d.J.JId != 0)
+                                    {
+                                        if (d.J.JId == destOut.entities[0].J.JId)
+                                        {
+                                            // AuId -> Id -> J.JId -> Id
+                                            ArrayList temp = new ArrayList();
+                                            temp.Add(dept);
+                                            Obj _mid1 = new Obj("Paper", d.Id);
+                                            temp.Add(_mid1);
+                                            Obj _mid2 = new Obj("Journal", d.J.JId);
+                                            temp.Add(_mid2);
+                                            temp.Add(dest);
+                                            ret.Add(temp);
+                                        }
+                                    }
+                                }
+                                if (d.C != null && destOut.entities[0].C != null)
+                                {
+                                    if (d.C.CId != 0)
+                                    {
+                                        if (d.C.CId == destOut.entities[0].C.CId)
+                                        {
+                                            // AuId -> Id -> C.CId -> Id
+                                            ArrayList temp = new ArrayList();
+                                            temp.Add(dept);
+                                            Obj _mid1 = new Obj("Paper", d.Id);
+                                            temp.Add(_mid1);
+                                            Obj _mid2 = new Obj("Conference", d.C.CId);
+                                            temp.Add(_mid2);
+                                            temp.Add(dest);
+                                            ret.Add(temp);
+
+                                        }
+                                    }
+                                }
+                                if (d.F != null && destOut.entities[0].F != null)
+                                {
+                                    foreach (FClass f1 in d.F)
+                                    {
+                                        foreach (FClass f2 in destOut.entities[0].F)
+                                        {
+                                            if (f1.FId != 0)
+                                            {
+                                                if (f1.FId == f2.FId)
+                                                {
+                                                    // AuId -> Id -> F.FId -> Id
+                                                    ArrayList temp = new ArrayList();
+                                                    temp.Add(dept);
+                                                    Obj _mid1 = new Obj("Paper", d.Id);
+                                                    temp.Add(_mid1);
+                                                    Obj _mid2 = new Obj("Field", f1.FId);
+                                                    temp.Add(_mid2);
+                                                    temp.Add(dest);
+                                                    ret.Add(temp);
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (d.AA != null && destOut.entities[0].AA != null)
+                                {
+                                    
+                                    foreach (AAClass a1 in d.AA)
+                                    {
+                                        foreach (AAClass a2 in destOut.entities[0].AA)
+                                        {
+                                            if (a1.AuId != 0)
+                                            {
+                                                if (a1.AuId == a2.AuId)
+                                                {
+                                                    // AuId -> Id -> AuId -> Id 
+                                                    ArrayList temp = new ArrayList();
+                                                    temp.Add(dept);
+                                                    Obj _mid1 = new Obj("Paper", d.Id);
+                                                    temp.Add(_mid1);
+                                                    Obj _mid2 = new Obj("Author", a1.AuId);
+                                                    temp.Add(_mid2);
+                                                    temp.Add(dest);
+                                                    ret.Add(temp);
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
                             }
                         }
-
-
-                }
-                    else
-                    {
-                        // Paper to Author
-                    }
-                }
-                else
-                {
-                    if (dest.Type == "Paper")
-                    {
-                        // Author to Paper
                     }
                     else
                     {
                         // Author to Author
+                        Out0 deptOut = nRequest("Composite(AA.AuId=" + dept.ID.ToString() + ")", "AA.AuId%2cAA.AfId%2cId%2cRId", Max_Count);
+                        Out0 destOut = nRequest("Composite(AA.AuId=" + dest.ID.ToString() + ")", "AA.AuId%2cAA.AfId%2cId%2cRId", Max_Count);
+                        if (deptOut.entities != null && destOut.entities != null)
+                        {
+                            foreach (IDClass d1 in deptOut.entities)
+                            {
+                                foreach (IDClass s in destOut.entities)
+                                {
+                                    if (d1.Id == s.Id)
+                                    {
+                                        ArrayList temp = new ArrayList();
+                                        temp.Add(dept);
+                                        Obj _mid = new Obj("Paper", d1.Id);
+                                        temp.Add(_mid);
+                                        temp.Add(dest);
+                                        ret.Add(temp);
+
+                                    }
+                                }
+                                if (d1.RId != null)
+                                {
+                                    foreach (Int64 r in d1.RId)
+                                    {
+                                        foreach (IDClass c in destOut.entities)
+                                        {
+                                            if (c.Id == r)
+                                            {
+                                                ArrayList temp = new ArrayList();
+                                                temp.Add(dept);
+                                                Obj _mid1 = new Obj("Paper", d1.Id);
+                                                temp.Add(_mid1);
+                                                Obj _mid2 = new Obj("Paper", r);
+                                                temp.Add(_mid2);
+                                                temp.Add(dest);
+                                                ret.Add(temp);
+
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (d1.AA != null)
+                                {
+                                    foreach (AAClass a in d1.AA)
+                                    {
+                                        if (a.AuId == dept.ID)
+                                        {
+                                            foreach (IDClass d2 in destOut.entities)
+                                            {
+                                                if (d2.AA != null)
+                                                {
+                                                    foreach (AAClass b in d2.AA)
+                                                    {
+                                                        if (b.AuId == dest.ID)
+                                                        {
+                                                            if (b.AfId != 0 && a.AfId != 0)
+                                                            {
+                                                                if (b.AfId == a.AfId)
+                                                                {
+                                                                    ArrayList temp = new ArrayList();
+                                                                    temp.Add(dept);
+                                                                    Obj _mid = new Obj("AuthorField", b.AfId);
+                                                                    temp.Add(_mid);
+                                                                    temp.Add(dest);
+                                                                    ret.Add(temp);
+
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
             catch
             {
+                Console.WriteLine("Aborted and return");
+                Console.Write(" id1: ");
+                dept.Print();
+                Console.Write(" id2: ");
+                dest.Print();
+                Console.WriteLine(" --------------------- Result Count: " + ret.Count.ToString());
                 return ret;
             }
+            
+            Console.Write(" id1: ");
+            dept.Print();
+            Console.Write(" id2: ");
+            dest.Print();
+            Console.WriteLine(" --------------------- Result Count: " + ret.Count.ToString());
             return ret;
         }
 
     }
 
 }
+
